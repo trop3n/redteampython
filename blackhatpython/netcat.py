@@ -14,7 +14,7 @@ def execute(cmd):
     output = subprocess.check_output(shlex.split(cmd)), stderr=subprocess.STDOUT)
     return output.decode()
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='BHP Net Tool',
         formatter_class=arg_parse.RawDescriptionHelpFormatter,
