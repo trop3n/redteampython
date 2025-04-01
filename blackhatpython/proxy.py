@@ -44,3 +44,21 @@ def response_handler(buffer):
     # perform packet modifications
     return buffer
 
+def proxy_handler(client_socket, remote_host, remote_port, receive_first):
+    remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    remote_socket.connect((remote_host, remote_port)) # 1
+    if receive_first: # 2
+        remote_buffer = receive_from(remote_socket)
+        hexdump(remote_buffer)
+
+    remote_buffer = response_handler(remote_buffer) # 3
+    if len(remote_buffer):
+        print("[<==] Sending %d bytes to localhost." % len(remote_buffer))
+        client_socket.send(remote_buffer)
+
+    while True:
+        local_buffer = receive_from(client_socket)
+        if len(local_buffer):
+            line = "[==>] Received %d bytes from localhost." % len(local_buffer)
+            print(line)
+            hexdump(local_buffer)
