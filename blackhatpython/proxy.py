@@ -24,16 +24,23 @@ def hexdump(src, length=16, show=True):
         else:
             return results
         
-def receive_from(connection):
+def receive_from(connection): # 1
     buffer = b"" 
     connection.settimeout(5)
     try:
         while True:
-            data = connection.recv(4096)
+            data = connection.recv(4096) # 2
             if not data:
                 break
             buffer += data
     except Exception as e:
         pass
     return buffer
-    
+
+def request_handler(buffer):
+    # perform packet modifications
+    return buffer
+def response_handler(buffer):
+    # perform packet modifications
+    return buffer
+
