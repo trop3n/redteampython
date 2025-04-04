@@ -22,3 +22,12 @@ def ssh_command(ip, port, user, passwd, command):
                 ssh_session.send(str(e))
         client.close()
     return
+
+if __name__ == '__main__':
+    import getpass
+    user = getpass.getuser()
+    password = getpass.getpass()
+
+    ip = input('Enter server IP" ')
+    port = input('Enter port: ')
+    ssh_command(ip, port, user, password, 'ClientConnected')
